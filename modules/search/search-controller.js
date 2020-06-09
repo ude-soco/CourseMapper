@@ -85,7 +85,7 @@ var parseExtResources = function (er) {
     var title = er.title;
     var desc = er.description;
     var type = 'extResources';
-    var link = '/treeNode/' + er.contentId + '/#/cid/' + er.courseId + '/nid/' + er.contentId + '?tab=learningHub&hid=' + er._id;
+    var link = '/treeNode/' + er.contentId + '/#/cid/' + er.courseId + '/nid/' + er.contentId + '?tab=learningHub&hid=' + er.postId;
 
     var match = new matchResult(title, desc, type, link);
     return match;

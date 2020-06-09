@@ -100,7 +100,7 @@
                             <h5>External Resources:</h5>
                             <ul class="list-unstyled">
                                 <li ng-repeat="extRes in result.extResources">
-                                    <a href="/treeNode/{{extRes.contentId}}/#/cid/{{extRes.courseId}}/nid/{{extRes.contentId}}?tab=learningHub&hid={{extRes._id}}">
+                                    <a href="/treeNode/{{extRes.contentId}}/#/cid/{{extRes.courseId}}/nid/{{extRes.contentId}}?tab=learningHub&hid={{extRes.postId}}">
                                         {{extRes.title | cut:true:30:' ...'}}
                                     </a>
                                 </li>

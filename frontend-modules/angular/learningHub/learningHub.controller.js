@@ -1,4 +1,4 @@
-app.controller('aggregationController',['$scope','$sce','$http', function($scope,$sce,$http){
+app.controller('aggregationController',['$scope','$sce','$http','$location', function($scope,$sce,$http,$location){
     /**
      * Declare and initialise the posts[], postType(s), sortTime(s),enabled(personal space)
      */
@@ -9,6 +9,7 @@ app.controller('aggregationController',['$scope','$sce','$http', function($scope
     $scope.query='';
     $scope.enabled = false;
     $scope.sort = "";
+    $scope.highlightPostId = $location.search().hid || '';
 
     /**
      * Initialize for pagination

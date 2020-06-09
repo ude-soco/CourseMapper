@@ -582,6 +582,7 @@ var NewsfeedListener = {
     onAfterPdfAnnotationDeleted: function (deletePdfAnnotation, user) {
         var userId = user._id;
         var pdfId = deletePdfAnnotation.pdfId;
+        var parentId = deletePdfAnnotation.parentId;
         if (pdfId) {
             Resources.findOne({_id: pdfId})
                 .exec(function (err, result) {
@@ -592,6 +593,7 @@ var NewsfeedListener = {
                                 .exec(function (err, res) {
                                     if (res) {
                                         var curDate = Date.now();
+                                        var actionType = parentId ? 'deleted reply' : 'deleted';
                                         var nf = new NewsfeedAgg(
                                             {
                                                 userId: userId,
@@ -600,7 +602,7 @@ var NewsfeedListener = {
                                                 actionName: res.name,
                                                 courseId: result.courseId,
                                                 nodeId: res.id,
-                                                actionType: "deleted",
+                                                actionType: actionType,
                                                 dateAdded: curDate
                                             }
                                         );
@@ -612,15 +614,15 @@ var NewsfeedListener = {
                                             }
                                         );
 
-                                        NewsfeedAgg.updateMany(
-                                            {actionSubjectIds: pdfId},
-                                            {$set: {"isSubjectDeleted": true}},
-                                            function (err) {
-                                                if (!err) debug('');
-                                                else
-                                                    debug(err);
-                                            }
-                                        );
+                                        // NewsfeedAgg.updateMany(
+                                        //     {actionSubjectIds: pdfId},
+                                        //     {$set: {"isSubjectDeleted": true}},
+                                        //     function (err) {
+                                        //         if (!err) debug('');
+                                        //         else
+                                        //             debug(err);
+                                        //     }
+                                        // );
                                     }
 
                                 })
@@ -680,6 +682,7 @@ var NewsfeedListener = {
             });
 
     },
+
 
     /*onAfterAnnotationZonePdfCreated: function (newPdfAnnotationZone) {
      PdfAnnotationZone.findOne({_id: newPdfAnnotationZone._id})
@@ -899,15 +902,15 @@ var NewsfeedListener = {
                                         }
                                     );
 
-                                    NewsfeedAgg.updateMany(
-                                        {actionSubjectIds: videoId},
-                                        {$set: {"isSubjectDeleted": true}},
-                                        function (err) {
-                                            if (!err) debug('');
-                                            else
-                                                debug(err);
-                                        }
-                                    );
+                                    // NewsfeedAgg.updateMany(
+                                    //     {actionSubjectIds: videoId},
+                                    //     {$set: {"isSubjectDeleted": true}},
+                                    //     function (err) {
+                                    //         if (!err) debug('');
+                                    //         else
+                                    //             debug(err);
+                                    //     }
+                                    // );
 
                                 }
                             })
@@ -933,13 +936,57 @@ var NewsfeedListener = {
                                                     var curDate = Date.now();
                                                     var nf = new NewsfeedAgg(
                                                         {
-                                                            userId: doc.authorId,
+                                                            userId: user._id,
                                                             actionSubjectIds: videoId,
                                                             actionSubject: "video annotation",
                                                             actionName: res.name,
                                                             courseId: result.courseId,
                                                             nodeId: res.id,
                                                             actionType: "replied",
+                                                            dateAdded: curDate
+                                                        }
+                                                    );
+                                                    nf.save(
+                                                        function (err, doc) {
+                                                            if (!err) debug('');
+                                                            else
+                                                                debug(err);
+                                                        }
+                                                    );
+                                                }
+                                            })
+                                    }
+                                }
+                            })
+                    }
+                }
+            });
+    },
+
+    onAfterVideoCommentDeleted: function (newVideoComment, user) {
+        VideoAnnotation.findOne({_id: newVideoComment})
+            .exec(function (err, doc) {
+                if (doc) {
+                    var videoId = doc.video_id;
+                    if (videoId) {
+                        Resources.findOne({_id: videoId})
+                            .exec(function (err, result) {
+                                if (result) {
+                                    var treeNodeId = result.treeNodeId;
+                                    if (treeNodeId) {
+                                        SubTopics.findOne({_id: treeNodeId})
+                                            .exec(function (err, res) {
+                                                if (res) {
+                                                    var curDate = Date.now();
+                                                    var nf = new NewsfeedAgg(
+                                                        {
+                                                            userId: user._id,
+                                                            actionSubjectIds: videoId,
+                                                            actionSubject: "video annotation",
+                                                            actionName: res.name,
+                                                            courseId: result.courseId,
+                                                            nodeId: res.id,
+                                                            actionType: "deleted reply",
                                                             dateAdded: curDate
                                                         }
                                                     );
@@ -1252,13 +1299,50 @@ var NewsfeedListener = {
                                         );
                                         nf.save(
                                             function (err, doc) {
-                                                console.log(doc);
                                                 if (!err) debug('');
                                                 else
                                                     debug(err);
                                             }
                                         );
                                     }
+                                }
+                            })
+                    }
+
+                }
+            });
+
+    },
+
+    onAfterLearningHubCommentDeleted: function (extRes, user) {
+        ExtResources.posts.findOne({postId: extRes.postId})
+            .exec(function (err, doc) {
+                //var linkId = doc.
+                if (doc) {
+                    var contentId = doc.contentId;
+                    if (contentId) {
+                        SubTopics.findOne({_id: contentId})
+                            .exec(function (err, result) {
+                                if (result) {
+                                    var nf = new NewsfeedAgg(
+                                        {
+                                            userId: user._id,
+                                            actionSubjectIds: doc.postId,
+                                            actionSubject: "external resource",
+                                            actionName: doc.title,
+                                            courseId: doc.courseId,
+                                            nodeId: result.id,
+                                            actionType: "deleted comment",
+                                            dateAdded: new Date()
+                                        }
+                                    );
+                                    nf.save(
+                                        function (err, doc) {
+                                            if (!err) debug('');
+                                            else
+                                                debug(err);
+                                        }
+                                    );
                                 }
                             })
                     }

@@ -57,7 +57,7 @@
                                             <a><b>{{nfData.actionName}}</b></a>-->
 
                                             <b>{{nfData.userId.displayName | capitalize}}</b> {{nfData.actionType}}
-                                            <span ng-if = "nfData.actionType == 'replied'">to</span> <span ng-if = "nfData.actionType == 'commented'">on</span>
+                                            <span ng-if = "nfData.actionType == 'replied' || nfData.actionType == 'deleted reply'">to</span> <span ng-if = "nfData.actionType == 'commented' || nfData.actionType == 'deleted comment'">on</span>
                                             {{nfData.actionSubject}} <span
                                                     ng-if = "nfData.actionSubject == 'pdf annotation' || nfData.actionSubject == 'video annotation'">in</span>
 

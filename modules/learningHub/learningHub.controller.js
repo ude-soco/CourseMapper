@@ -442,8 +442,8 @@ hubcontroller.prototype.removeCommentAsync = async(function (params, user) {
         if (post.comments[i]._id.toString() === commentId) {
             var comment = post.comments[i];
             if (checkHasRightToModify(comment, user)) {
+                Plugin.doAction('onAfterLearningHubCommentDeleted', post, user);
                 post.comments[i].remove();
-
             }
             break;
         }

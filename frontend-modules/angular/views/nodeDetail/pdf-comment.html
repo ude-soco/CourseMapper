@@ -21,8 +21,7 @@
         <div style="display: flow-root">
             <div class="pull-left" ng-hide="source.isEditMode">
                 <a class="cursor" ng-show="showCommentingArea" ng-click="toggle = !toggle">
-                    {{!toggle ? ((comments === undefined || comments === null) ? 0 : comments.length) + ' comment(s)' : 'hide
-                    comments'}}
+                    {{!toggle ? ((comments === undefined || comments === null) ? 0 : comments.length) + ' comment(s)' : 'hide comments'}}
                 </a>
             </div>
             <div class="replyControl pull-right"
@@ -64,7 +63,7 @@
                     <div class="box-body">
                             <span class="posted-at">
                               Posted <strong>{{comment.date | relativeDate}}</strong>
-                              By <strong><span>{{comment.author}}</span></strong>
+                              By <strong><span>{{comment.authorDisplayName||comment.author}}</span></strong>
                             </span>
                         <a class="pull-right" style="cursor: pointer;" ng-show="(comment.isAuthor || isAdmin)"
                            title="delete" ng-click="removeComment(comment._id)">X</a>

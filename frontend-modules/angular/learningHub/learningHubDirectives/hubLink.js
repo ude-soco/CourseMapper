@@ -39,7 +39,8 @@ learningHubModule.directive('hubLink', function () {
             controller: "HubLinkController as vm",
             scope: {
                 post: '=',
-                space: "="
+                space: "=",
+                highlight: '='
             },
             link: function (scope) {
                scope.templateUrl = setTemplate(scope.vm.post);
