@@ -39,7 +39,7 @@ kubectl logs \
 ### Requirements
 
 1. MongoDB (installed and running)
-2. NodeJS and npm (installed)
+2. NodeJS (v 8.3.0) and npm (installed)
 
 ### Usage
 
