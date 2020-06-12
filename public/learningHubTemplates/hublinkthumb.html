@@ -5,6 +5,18 @@
             <div class="col-xs-8 title-text">
                 <span><a href="{{vm.post.url | trustUrl}}" target="_blank">{{vm.post.title}}</a></span>
             </div>
+            <div class="col-xs-8" style="padding-left:0">
+                <span class = "posted-at">
+                    <span ng-if = "!vm.space">
+                        Posted <strong>{{vm.post.dateAdded | relativeDate}}</strong>
+                        <span ng-if = "vm.post.userDisplayName">By <strong>{{vm.post.userDisplayName}}</strong></span>
+                    </span>
+                    <span ng-if = "vm.space">
+                        Posted <strong>{{vm.post.originalDateAdded | relativeDate}}</strong>
+                        <span ng-if = "vm.post.originalAuthorDisplayName">By <strong>{{vm.post.originalAuthorDisplayName}}</strong></span>
+                    </span>
+                </span>
+            </div>
             <div class="col-xs-3">
                     <span class="card-action pull-right">
                       <i class="fa fav-icon fa-star-o"

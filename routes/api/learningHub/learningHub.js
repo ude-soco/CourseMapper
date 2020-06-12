@@ -35,6 +35,8 @@ router.post('/add/:nodeId', helper.l2pAuth, helper.ensureAuthenticated, cors(),
         var nodeId = mongoose.Types.ObjectId(req.params.nodeId);
         req.body.contentId = nodeId;
         req.body.userId = userId;
+        req.body.userUserName = req.user.username;
+        req.body.userDisplayName = req.user.displayName;
         var nod = new NodeController();
 
         nod.getNodeAsync()({

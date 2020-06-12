@@ -43,6 +43,8 @@ hubcontroller.prototype.add = function (error, params, success) {
         contentId: params.contentId,
         postId: new mongoose.Types.ObjectId,
         userId: params.userId,
+        userUserName: params.userUserName,
+        userDisplayName: params.userDisplayName,
         title: params.title,
         url: params.url,
         type: params.type,
@@ -252,7 +254,9 @@ hubcontroller.prototype.addPersonal = function (error, params, success) {
         embedHtml: params.embedHtml ? params.embedHtml : null,
         description: params.description ? params.description : null,
         dateAdded: new Date(),
-        tags: params.tags
+        tags: params.tags,
+        originalDateAdded: params.dateAdded,
+        originalAuthorDisplayName: params.userDisplayName,
     };
     posts.findOneAndUpdate(
         {

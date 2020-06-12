@@ -20,7 +20,9 @@ personalSchema.add({
     embedHtml: {type: String},
     description: {type: String},
     dateAdded: {type: Date},
-    tags: [{type: String}]
+    tags: [{type: String}],
+    originalDateAdded: {type: Date},
+    originalAuthorDisplayName: {type: String},
 });
 
 personalSchema.index({ title: 'text', description: 'text', tags: 'text', url: 'text' });

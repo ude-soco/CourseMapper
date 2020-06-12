@@ -30,6 +30,8 @@ hubSchema.add({
     courseId: {type: mongoose.Schema.Types.ObjectId, required: true},
     postId: {type: mongoose.Schema.Types.ObjectId},
     userId: {type: mongoose.Schema.Types.ObjectId, required: true},
+    userUserName: {type: String},
+    userDisplayName: {type: String},
     contentId: {type: mongoose.Schema.Types.ObjectId, required: true},
     title: {type: String, required: true},
     url: {type: String, required: true},
