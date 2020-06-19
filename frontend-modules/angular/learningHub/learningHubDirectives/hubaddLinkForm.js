@@ -26,58 +26,70 @@ learningHubModule.controller("hubaddLinkController",[ '$rootScope','$scope', '$h
      */
     $scope.scrapelink=function(isValid,form){
         if(isValid){
-            $scope.loading=true;
-            $http.get('/api/learningHub/scrape', {params:{
-                'url':$scope.formData.url
-            }}).success( function (data)  {
-                //check data for error
-                if(data=="invalid link"){
-                    $scope.loading=false;
-                    form.$setPristine(true);
-                    $scope.linkInvalid=true;
-                }else{
-                    console.log(data);
-                    $scope.linkInvalid=false;
-                    $scope.formData.url = data.url;
-                    if(data.type){
-                        $scope.formData.type = data.type;
-                    }
-                    if(data.title){
-                        $scope.formData.title=data.title;
-                    }
-                    if(data.description){
-                        $scope.formData.description=$scope.descriptionValid(data.description);
-                    }
-                    //show or hide description
-                    if(data.type==="image" || data.type==="audio" || data.type==="slide" || data.type==="doc" || data.type==="pdf" || data.type==="story"){
-                        $scope.des_hide=true;
-                    }else{
-                        $scope.des_hide=false;
-                    }
+            $http.get('/api/learningHub/doesLinkExist', {params:{
+                    'url':$scope.formData.url,
+                    'contentId':$scope.treeNode._id
+                }}).success(function (data) {
+                if(data.result){
+                    $scope.linkExists=true;
+                }
+                else {
+                    $scope.linkExists=false;
+                    $scope.loading=true;
+                    $http.get('/api/learningHub/scrape', {params:{
+                            'url':$scope.formData.url
+                        }}).success( function (data)  {
+                        //check data for error
+                        if(data=="invalid link"){
+                            $scope.loading=false;
+                            form.$setPristine(true);
+                            $scope.linkInvalid=true;
+                        }else{
+                            $scope.linkInvalid=false;
+                            $scope.formData.url = data.url;
+                            if(data.type){
+                                $scope.formData.type = data.type;
+                            }
+                            if(data.title){
+                                $scope.formData.title=data.title;
+                            }
+                            if(data.description){
+                                $scope.formData.description=$scope.descriptionValid(data.description);
+                            }
+                            //show or hide description
+                            if(data.type==="image" || data.type==="audio" || data.type==="slide" || data.type==="doc" || data.type==="pdf" || data.type==="story"){
+                                $scope.des_hide=true;
+                            }else{
+                                $scope.des_hide=false;
+                            }
 
-                    if(data.html){
-                        $scope.formData.html = data.html;
-                    }
-                    if(data.image){
-                        $scope.formData.image = data.image;
-                    }
-                    if(data.name){
-                        $scope.formData.hostName = data.name;
-                    }
-                    if(data.favicon){
-                        $scope.formData.favicon = data.favicon;
-                    }
+                            if(data.html){
+                                $scope.formData.html = data.html;
+                            }
+                            if(data.image){
+                                $scope.formData.image = data.image;
+                            }
+                            if(data.name){
+                                $scope.formData.hostName = data.name;
+                            }
+                            if(data.favicon){
+                                $scope.formData.favicon = data.favicon;
+                            }
 
-                    //end loading and show the form
-                    $scope.loading=false;
-                    $scope.scraped=false;
+                            //end loading and show the form
+                            $scope.loading=false;
+                            $scope.scraped=false;
+                        }
+                    }).error( function (data) {
+                        $scope.loading=false;
+                        console.log(data);
+                    });
                 }
             }).error( function (data) {
                 $scope.loading=false;
                 console.log(data);
             });
         }
-
     };
 
     //util methods

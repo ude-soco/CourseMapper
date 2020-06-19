@@ -456,5 +456,26 @@ hubcontroller.prototype.removeCommentAsync = async(function (params, user) {
     return post;
 });
 
+hubcontroller.prototype.doesLinkExist = async(function (url, contentId, callback) {
+    var searchQuery = {
+        contentId: contentId,
+        url: url
+    };
+
+    posts.find(searchQuery).exec(function (err, posts) {
+        if (err) {
+            console.log(err);
+            callback(err, null);
+        } else {
+            if (posts.length < 1)
+                callback(null, {result:false});
+            else
+                callback(null, {result:true});
+        }
+    });
+
+    return {result:false};
+});
+
 
 module.exports = new hubcontroller();

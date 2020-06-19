@@ -9,6 +9,19 @@ var mongoose = require('mongoose');
 var cors = require('cors');
 var debug = require('debug')('cm:route');
 
+
+// scrape the submitted link
+router.get('/doesLinkExist', helper.l2pAuth, helper.ensureAuthenticated,
+    function (req, res) {
+        controller.doesLinkExist(req.query.url, req.query.contentId, function (error, result) {
+            if (error) {
+                res.send("invalid link")
+            } else {
+                res.json(result);
+            }
+        })
+    });
+
 // scrape the submitted link
 router.get('/scrape', helper.l2pAuth, helper.ensureAuthenticated,
     function (req, res) {

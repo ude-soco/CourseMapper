@@ -10,10 +10,11 @@
                 <!-- form for submitting the URL -->
                 <form  name="aggregateUrl"  ng-submit="scrapelink(aggregateUrl.$valid,aggregateUrl)" novalidate>
                     <!-- url -->
-                    <div id="url-group" class="form-group" ng-class="{'has-error' :(aggregateUrl.url.$invalid && !aggregateUrl.url.$pristine)|| linkInvalid}">
+                    <div id="url-group" class="form-group" ng-class="{'has-error' :(aggregateUrl.url.$invalid && !aggregateUrl.url.$pristine)|| linkInvalid || linkExists}">
                         <label for="url">Paste url*</label>
-                        <input type="url" name="url" id="url" class="form-control" placeholder="url" onchange="linkInvalid=false" ng-model="formData.url" required>
+                        <input type="url" name="url" id="url" class="form-control" placeholder="url" onchange="linkInvalid=false;linkExists=false" ng-model="formData.url" required>
                         <span ng-show="(aggregateUrl.url.$invalid && !aggregateUrl.url.$pristine) || linkInvalid" class="help-block"> Valid URL is required!</span>
+                        <span ng-show="linkExists" class="help-block">The URL already exist in the current node</span>
                     </div>
                     <!-- AggregateUrl submit-->
                     <button type="submit" class="btn btn-primary" ng-show="scraped" ng-disabled="aggregateUrl.$invalid">
